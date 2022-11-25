@@ -9,4 +9,5 @@ import com.bootcampProject.entities.applications.Bootcamp;
 public interface BootcampRepository extends JpaRepository<Bootcamp, Integer> {
 
 	List<Bootcamp> getByName(String name);
+	
 }
