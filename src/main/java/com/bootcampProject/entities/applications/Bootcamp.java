@@ -45,8 +45,9 @@ public class Bootcamp {
 	@Column(name="endDate")
 	private LocalDate endDate;
 	
-	@Column(name="state")
-	private int state;
+	@ManyToOne
+	@JoinColumn(name="bootcampState_id")
+	private BootcampState bootcampState;
 	
 	@OneToMany(mappedBy = "bootcamp")
 	private List<Application> applications;

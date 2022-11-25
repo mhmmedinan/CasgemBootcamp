@@ -17,5 +17,5 @@ public class GetBootcampResponse {
 	private String instructorLastName;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	private int state;
+	private String bootcampStateName;
 }

@@ -42,4 +42,16 @@ public class Messages {
 	public static final String ApplicationUpdated = "Application Updated";
 	public static final String ApplicationDeleted = "Application Deleted";
 
+	// ApplicationState
+	public static final String ApplicationStateListed = "ApplicationState Listed";
+	public static final String ApplicationStateCreated = "ApplicationState Created";
+	public static final String ApplicationStateUpdated = "ApplicationState Updated";
+	public static final String ApplicationStateDeleted = "ApplicationState Deleted";
+
+	// BootcampState
+	public static final String BootcampStateListed = "BootcampState Listed";
+	public static final String BootcampStateCreated = "BootcampState Created";
+	public static final String BootcampStateUpdated = "BootcampState Updated";
+	public static final String BootcampStateDeleted = "BootcampState Deleted";
+
 }

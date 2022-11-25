@@ -16,5 +16,5 @@ public class UpdateBootcampRequest {
 	private String name;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	private int state;
+	private int bootcampStateId;
 }

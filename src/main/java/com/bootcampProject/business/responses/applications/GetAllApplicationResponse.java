@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class GetAllApplicationResponse {
 
 	private int id;
-	private int state;
+	private String applicationStateName;
 	private String userFirstName;
 	private String userLastName;
 	private LocalDate userDateOfBirth;

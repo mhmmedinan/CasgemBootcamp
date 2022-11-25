@@ -11,5 +11,5 @@ public class CreateApplicationRequest {
 
 	private int userId;
 	private int  bootcampId;
-	private int state;
+	private int applicationStateId;
 }
