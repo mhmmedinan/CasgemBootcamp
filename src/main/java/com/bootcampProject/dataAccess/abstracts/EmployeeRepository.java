@@ -9,4 +9,6 @@ import com.bootcampProject.entities.users.Employee;
 public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 
 	List<Employee> getByFirstName(String firstName);
+	Employee getByNationalityId(String nationalityId);
+	Employee findById(int id);
 }

@@ -9,4 +9,6 @@ import com.bootcampProject.entities.users.Instructor;
 public interface InstructorRepository extends JpaRepository<Instructor, Integer>{
 
 	List<Instructor> getByFirstName(String firstName);
+	Instructor getByNationalityId(String nationalityId);
+	Instructor findById(int id);
 }

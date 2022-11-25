@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,7 +59,7 @@ public class EmployeesController {
 	}
 
 	@PostMapping("add")
-	public ResponseEntity<?> add(CreateEmployeeRequest createEmployeeRequest) {
+	public ResponseEntity<?> add(@RequestBody CreateEmployeeRequest createEmployeeRequest) {
 		DataResult<CreateEmployeeResponse> result = employeeService.add(createEmployeeRequest);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);
@@ -67,7 +68,7 @@ public class EmployeesController {
 	}
 
 	@PutMapping("update")
-	public ResponseEntity<?> update(UpdateEmployeeRequest updateEmployeeRequest) {
+	public ResponseEntity<?> update(@RequestBody UpdateEmployeeRequest updateEmployeeRequest) {
 		DataResult<UpdateEmployeeResponse> result =  employeeService.update(updateEmployeeRequest);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);

@@ -13,6 +13,7 @@ import com.bootcampProject.business.responses.employees.CreateEmployeeResponse;
 import com.bootcampProject.business.responses.employees.GetAllEmployeeResponse;
 import com.bootcampProject.business.responses.employees.GetEmployeeResponse;
 import com.bootcampProject.business.responses.employees.UpdateEmployeeResponse;
+import com.bootcampProject.core.utilities.exceptions.BusinessException;
 import com.bootcampProject.core.utilities.mapping.ModelMapperService;
 import com.bootcampProject.core.utilities.results.DataResult;
 import com.bootcampProject.core.utilities.results.Result;
@@ -35,7 +36,7 @@ public class EmployeeManager implements EmployeeService {
 		List<Employee> employees = employeeRepository.findAll();
 		List<GetAllEmployeeResponse> responses = employees.stream()
 				.map(employee -> modelMapperService.forResponse().map(employee, GetAllEmployeeResponse.class)).toList();
-		return new SuccessDataResult<List<GetAllEmployeeResponse>>(responses,Messages.EmployeeListed);
+		return new SuccessDataResult<List<GetAllEmployeeResponse>>(responses, Messages.EmployeeListed);
 	}
 
 	@Override
@@ -43,40 +44,55 @@ public class EmployeeManager implements EmployeeService {
 		List<Employee> employees = employeeRepository.getByFirstName(firstName);
 		List<GetAllEmployeeResponse> responses = employees.stream()
 				.map(employee -> modelMapperService.forResponse().map(employee, GetAllEmployeeResponse.class)).toList();
-		return new SuccessDataResult<List<GetAllEmployeeResponse>>(responses,Messages.EmployeeListed);
+		return new SuccessDataResult<List<GetAllEmployeeResponse>>(responses, Messages.EmployeeListed);
 	}
 
 	@Override
 	public DataResult<GetEmployeeResponse> getById(int id) {
-		Employee employee = employeeRepository.findById(id).get();
+		Employee employee = employeeRepository.findById(id);
 		GetEmployeeResponse response = modelMapperService.forResponse().map(employee, GetEmployeeResponse.class);
-		return new SuccessDataResult<GetEmployeeResponse>(response,Messages.EmployeeListed);
+		return new SuccessDataResult<GetEmployeeResponse>(response, Messages.EmployeeListed);
 	}
 
 	@Override
 	public DataResult<CreateEmployeeResponse> add(CreateEmployeeRequest createEmployeeRequest) {
+		checkIfEmployeeNationalityId(createEmployeeRequest.getNationalityId());
 		Employee employee = modelMapperService.forRequest().map(createEmployeeRequest, Employee.class);
 		employeeRepository.save(employee);
 
 		CreateEmployeeResponse response = modelMapperService.forResponse().map(employee, CreateEmployeeResponse.class);
-		return new SuccessDataResult<CreateEmployeeResponse>(response,Messages.EmployeeCreated);
+		return new SuccessDataResult<CreateEmployeeResponse>(response, Messages.EmployeeCreated);
 	}
 
 	@Override
 	public DataResult<UpdateEmployeeResponse> update(UpdateEmployeeRequest updateEmployeeRequest) {
+		checkIfEmployeeId(updateEmployeeRequest.getId());
 		Employee employee = modelMapperService.forRequest().map(updateEmployeeRequest, Employee.class);
 		employeeRepository.save(employee);
 
 		UpdateEmployeeResponse response = modelMapperService.forResponse().map(employee, UpdateEmployeeResponse.class);
-		return new SuccessDataResult<UpdateEmployeeResponse>(response,Messages.EmployeeUpdated);
+		return new SuccessDataResult<UpdateEmployeeResponse>(response, Messages.EmployeeUpdated);
 	}
 
 	@Override
 	public Result delete(DeleteEmployeeRequest deleteEmployeeRequest) {
+		checkIfEmployeeId(deleteEmployeeRequest.getId());
 		Employee employee = modelMapperService.forRequest().map(deleteEmployeeRequest, Employee.class);
 		employeeRepository.delete(employee);
 
 		return new SuccessResult(Messages.EmployeeDeleted);
+	}
+
+	private void checkIfEmployeeNationalityId(String nationalityId) {
+		Employee employee = employeeRepository.getByNationalityId(nationalityId);
+		if (employee != null)
+			throw new BusinessException(Messages.EmployeeNationalityIdExists);
+
+	}
+	
+	private void checkIfEmployeeId(int id) {
+		Employee employee = employeeRepository.findById(id);
+		if(employee==null) throw new BusinessException(Messages.EmployeeIdNotFound);
 	}
 
 }

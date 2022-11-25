@@ -1,4 +1,4 @@
-package com.bootcampProject.entities.users;
+package com.bootcampProject.entities.applications;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,49 +8,46 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.bootcampProject.entities.evaluations.Application;
+import com.bootcampProject.entities.users.Instructor;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name="users")
+@Table(name="bootcamps")
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Data
-@Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class Bootcamp {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="firstName")
-	private String firstName;
+	@Column(name="name")
+	private String name;
 	
-	@Column(name="lastName")
-	private String lastName;
+	@ManyToOne
+	@JoinColumn(name="instructor_id")
+	private Instructor instructor;
 	
-	@Column(name="dateOfBirth")
-	private LocalDate dateOfBirth;
+	@Column(name="startDate")
+	private LocalDate startDate;
 	
-	@Column(name="nationalityId")
-	private String nationalityId;
+	@Column(name="endDate")
+	private LocalDate endDate;
 	
-	@Column(name="email")
-	private String email;
+	@Column(name="state")
+	private int state;
 	
-	@Column(name="password")
-	private String password;
-	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "bootcamp")
 	private List<Application> applications;
-	
 }

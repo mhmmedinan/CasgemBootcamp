@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,7 +53,7 @@ public class ApplicantsController {
 	}
 	
 	@PostMapping("add")
-	public ResponseEntity<?> add(CreateApplicantRequest createApplicantRequest) {
+	public ResponseEntity<?> add(@RequestBody CreateApplicantRequest createApplicantRequest) {
 		DataResult<CreateApplicantResponse> result = applicantService.add(createApplicantRequest);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);
@@ -63,7 +64,7 @@ public class ApplicantsController {
 	
 	
 	@PutMapping("update")
-	public ResponseEntity<?> update(UpdateApplicantRequest updateApplicantRequest) {
+	public ResponseEntity<?> update(@RequestBody UpdateApplicantRequest updateApplicantRequest) {
 		DataResult<UpdateApplicantResponse> result = applicantService.update(updateApplicantRequest);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);

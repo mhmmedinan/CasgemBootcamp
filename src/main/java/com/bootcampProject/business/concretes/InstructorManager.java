@@ -13,6 +13,7 @@ import com.bootcampProject.business.responses.instructors.CreateInstructorRespon
 import com.bootcampProject.business.responses.instructors.GetAllInstructorResponse;
 import com.bootcampProject.business.responses.instructors.GetInstructorResponse;
 import com.bootcampProject.business.responses.instructors.UpdateInstructorResponse;
+import com.bootcampProject.core.utilities.exceptions.BusinessException;
 import com.bootcampProject.core.utilities.mapping.ModelMapperService;
 import com.bootcampProject.core.utilities.results.DataResult;
 import com.bootcampProject.core.utilities.results.Result;
@@ -52,7 +53,7 @@ public class InstructorManager implements InstructorService {
 	public DataResult<GetInstructorResponse> getById(int id)
 	{
 	
-		Instructor instructor = instructorRepository.findById(id).get();
+		Instructor instructor = instructorRepository.findById(id);
 	
 		GetInstructorResponse response = mapperService.forResponse().map(instructor, GetInstructorResponse.class);
 		return new SuccessDataResult<GetInstructorResponse>(response,Messages.InstructorListed);
@@ -60,6 +61,7 @@ public class InstructorManager implements InstructorService {
 
 	@Override
 	public DataResult<CreateInstructorResponse> add(CreateInstructorRequest createInstructorRequest) {
+		checkIfInstructorNationalityId(createInstructorRequest.getNationalityId());
 		Instructor instructor = mapperService.forRequest().map(createInstructorRequest, Instructor.class);
 		instructorRepository.save(instructor);
 		
@@ -69,7 +71,7 @@ public class InstructorManager implements InstructorService {
 
 	@Override
 	public DataResult<UpdateInstructorResponse> update(UpdateInstructorRequest updateInstructorRequest) {
-		
+		checkIfInstructorId(updateInstructorRequest.getId());
 		Instructor instructor = mapperService.forRequest().map(updateInstructorRequest, Instructor.class);
 		instructorRepository.save(instructor);
 		
@@ -79,11 +81,21 @@ public class InstructorManager implements InstructorService {
 
 	@Override
 	public Result delete(DeleteInstructorRequest deleteInstructorRequest){
+		checkIfInstructorId(deleteInstructorRequest.getId());
 		Instructor instructor = mapperService.forRequest().map(deleteInstructorRequest, Instructor.class);
 		instructorRepository.delete(instructor);
-		
-		
+
 		return new SuccessResult(Messages.InstructorDeleted);
+	}
+	
+	private void checkIfInstructorNationalityId(String nationalityId) {
+		Instructor instructor = instructorRepository.getByNationalityId(nationalityId);
+		if (instructor!=null) throw new BusinessException(Messages.EmployeeNationalityIdExists);
+	}
+	
+	private void checkIfInstructorId(int id) {
+		Instructor instructor = instructorRepository.findById(id);
+		if(instructor==null) throw new BusinessException(Messages.InstructorIdNotFound);
 	}
 
 }
