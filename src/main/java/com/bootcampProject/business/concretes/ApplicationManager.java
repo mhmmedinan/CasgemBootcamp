@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.ApplicantService;
 import com.bootcampProject.business.abstracts.ApplicationService;
+import com.bootcampProject.business.abstracts.BlacklistService;
 import com.bootcampProject.business.abstracts.BootcampService;
 import com.bootcampProject.business.constants.Messages;
 import com.bootcampProject.business.requests.applications.CreateApplicationRequest;
@@ -34,6 +35,7 @@ public class ApplicationManager implements ApplicationService {
 	private ModelMapperService modelMapperService;
 	private ApplicantService applicantService;
 	private BootcampService bootcampService;
+	private BlacklistService blacklistService;
 
 	@Override
 	public DataResult<List<GetAllApplicationResponse>> getAll() {
@@ -66,6 +68,7 @@ public class ApplicationManager implements ApplicationService {
 		checkIfApplicantIdNotDoes(createApplicationRequest.getApplicantId());
 		checkIfExistsBootcampIdNotDoes(createApplicationRequest.getBootcampId());
 		checkIfApplicantIdExists(createApplicationRequest.getApplicantId());
+		blacklistService.checkIfBlacklistApplicantIdExists(createApplicationRequest.getApplicantId());
 		Application application = modelMapperService.forRequest().map(createApplicationRequest, Application.class);
 		applicationRepository.save(application);
 
@@ -79,6 +82,7 @@ public class ApplicationManager implements ApplicationService {
 		checkIfApplicantIdNotDoes(updateApplicationRequest.getApplicantId());
 		checkIfExistsBootcampIdNotDoes(updateApplicationRequest.getBootcampId());
 		checkIfApplicantIdExists(updateApplicationRequest.getApplicantId());
+		blacklistService.checkIfBlacklistApplicantIdExists(updateApplicationRequest.getApplicantId());
 		Application application = modelMapperService.forRequest().map(updateApplicationRequest, Application.class);
 		applicationRepository.save(application);
 
@@ -106,9 +110,11 @@ public class ApplicationManager implements ApplicationService {
 
 	private void checkIfApplicantIdExists(int applicantId) {
 		Application applicant = applicationRepository.findByApplicantId(applicantId);
-		if (applicant!=null)  {
+		if (applicant != null) {
 			throw new BusinessException(Messages.CheckIfApplicantIdExists);
 		}
 	}
+
 	
+
 }

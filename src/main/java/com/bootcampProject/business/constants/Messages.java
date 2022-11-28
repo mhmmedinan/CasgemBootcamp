@@ -18,6 +18,8 @@ public class Messages {
 
 	public static final String ApplicantIdExists = "ApplicantId Exists";
 	public static final String CheckIfApplicantIdExists ="This user has applied before";
+	public static final String BlacklistApplicantIdExists = "This user cannot be added because it is blacklisted!";
+	public static final String ApplicantIdExistsBlacklist ="There is such a user";
 
 	// Applicant
 	public static final String ApplicantDeleted = "Applicant Deleted";
@@ -64,5 +66,8 @@ public class Messages {
 	
 	//Blacklist
 	public static final String BlacklistListed = "Blacklist Listed";
+	public static final String BlacklistCreated = "Blacklist Created";
+	public static final String BlacklistUpdated = "Blacklist Updated";
+	public static final String BlacklistDeleted = "Blacklist Deleted";
 
 }

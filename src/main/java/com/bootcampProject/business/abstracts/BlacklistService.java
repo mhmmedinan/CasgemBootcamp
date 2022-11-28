@@ -19,6 +19,9 @@ public interface BlacklistService {
 	DataResult<GetBlacklistResponse> getById(int id);
 	DataResult<CreateBlacklistResponse> add(CreateBlacklistRequest createBlacklistRequest);
 	DataResult<UpdateBlacklistResponse> update(UpdateBlacklistRequest updateBlacklistRequest);
+	DataResult<GetBlacklistResponse> getByApplicantId(int applicantId);
 	Result delete(DeleteBlacklistRequest deleteBlacklistRequest);
+	void checkIfBlacklistApplicantIdExists(int id);
+	
 	
 }
