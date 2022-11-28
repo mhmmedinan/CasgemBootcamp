@@ -37,7 +37,7 @@ public class InstructorManager implements InstructorService {
 		List<GetAllInstructorResponse> responses = instructors.stream()
 				.map(instructor -> mapperService.forResponse().map(instructor, GetAllInstructorResponse.class))
 				.toList();
-		return new SuccessDataResult<List<GetAllInstructorResponse>>(responses,Messages.InstructorListed);
+		return new SuccessDataResult<List<GetAllInstructorResponse>>(responses, Messages.InstructorListed);
 	}
 
 	@Override
@@ -46,56 +46,65 @@ public class InstructorManager implements InstructorService {
 		List<GetAllInstructorResponse> responses = instructors.stream()
 				.map(instructor -> mapperService.forResponse().map(instructor, GetAllInstructorResponse.class))
 				.toList();
-		return new SuccessDataResult<List<GetAllInstructorResponse>>(responses,Messages.InstructorListed);
+		return new SuccessDataResult<List<GetAllInstructorResponse>>(responses, Messages.InstructorListed);
 	}
 
 	@Override
-	public DataResult<GetInstructorResponse> getById(int id)
-	{
-	
+	public DataResult<GetInstructorResponse> getById(int id) {
+		checkIfInstructorId(id);
 		Instructor instructor = instructorRepository.findById(id);
-	
+
 		GetInstructorResponse response = mapperService.forResponse().map(instructor, GetInstructorResponse.class);
-		return new SuccessDataResult<GetInstructorResponse>(response,Messages.InstructorListed);
+		return new SuccessDataResult<GetInstructorResponse>(response, Messages.InstructorListed);
 	}
 
 	@Override
 	public DataResult<CreateInstructorResponse> add(CreateInstructorRequest createInstructorRequest) {
-		checkIfInstructorNationalityId(createInstructorRequest.getNationalityId());
+		checkIfInstructorNationalityId(createInstructorRequest.getNationalIdentity());
+		checkIfInstructorEmailExists(createInstructorRequest.getEmail());
 		Instructor instructor = mapperService.forRequest().map(createInstructorRequest, Instructor.class);
 		instructorRepository.save(instructor);
-		
+
 		CreateInstructorResponse response = mapperService.forResponse().map(instructor, CreateInstructorResponse.class);
-		return new SuccessDataResult<CreateInstructorResponse>(response,Messages.InstructorCreated);
+		return new SuccessDataResult<CreateInstructorResponse>(response, Messages.InstructorCreated);
 	}
 
 	@Override
 	public DataResult<UpdateInstructorResponse> update(UpdateInstructorRequest updateInstructorRequest) {
 		checkIfInstructorId(updateInstructorRequest.getId());
+		checkIfInstructorEmailExists(updateInstructorRequest.getEmail());
 		Instructor instructor = mapperService.forRequest().map(updateInstructorRequest, Instructor.class);
 		instructorRepository.save(instructor);
-		
+
 		UpdateInstructorResponse response = mapperService.forResponse().map(instructor, UpdateInstructorResponse.class);
-		return new SuccessDataResult<UpdateInstructorResponse>(response,Messages.InstructorUpdated);
+		return new SuccessDataResult<UpdateInstructorResponse>(response, Messages.InstructorUpdated);
 	}
 
 	@Override
-	public Result delete(DeleteInstructorRequest deleteInstructorRequest){
+	public Result delete(DeleteInstructorRequest deleteInstructorRequest) {
 		checkIfInstructorId(deleteInstructorRequest.getId());
 		Instructor instructor = mapperService.forRequest().map(deleteInstructorRequest, Instructor.class);
 		instructorRepository.delete(instructor);
 
 		return new SuccessResult(Messages.InstructorDeleted);
 	}
-	
+
 	private void checkIfInstructorNationalityId(String nationalityId) {
-		Instructor instructor = instructorRepository.getByNationalityId(nationalityId);
-		if (instructor!=null) throw new BusinessException(Messages.EmployeeNationalityIdExists);
+		Instructor instructor = instructorRepository.getByNationalIdentity(nationalityId);
+		if (instructor != null)
+			throw new BusinessException(Messages.EmployeeNationalityIdExists);
 	}
-	
+
 	private void checkIfInstructorId(int id) {
 		Instructor instructor = instructorRepository.findById(id);
-		if(instructor==null) throw new BusinessException(Messages.InstructorIdNotFound);
+		if (instructor == null)
+			throw new BusinessException(Messages.InstructorIdNotFound);
+	}
+	
+	private void checkIfInstructorEmailExists(String email) {
+		Instructor instructor = instructorRepository.getByEmail(email);
+		if (instructor != null)
+			throw new BusinessException(Messages.InstructorEmailExists);
 	}
 
 }

@@ -2,6 +2,8 @@ package com.bootcampProject.webApi.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +55,7 @@ public class ApplicantsController {
 	}
 	
 	@PostMapping("add")
-	public ResponseEntity<?> add(@RequestBody CreateApplicantRequest createApplicantRequest) {
+	public ResponseEntity<?> add(@Valid @RequestBody CreateApplicantRequest createApplicantRequest) {
 		DataResult<CreateApplicantResponse> result = applicantService.add(createApplicantRequest);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);
@@ -64,7 +66,7 @@ public class ApplicantsController {
 	
 	
 	@PutMapping("update")
-	public ResponseEntity<?> update(@RequestBody UpdateApplicantRequest updateApplicantRequest) {
+	public ResponseEntity<?> update(@RequestBody @Valid UpdateApplicantRequest updateApplicantRequest) {
 		DataResult<UpdateApplicantResponse> result = applicantService.update(updateApplicantRequest);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);

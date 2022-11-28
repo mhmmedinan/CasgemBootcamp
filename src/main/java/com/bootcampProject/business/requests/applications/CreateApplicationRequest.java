@@ -1,5 +1,7 @@
 package com.bootcampProject.business.requests.applications;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateApplicationRequest {
 
-	private int userId;
+	@NotNull
+	private int applicantId;
+
+	@NotNull
 	private int  bootcampId;
+
+	@NotNull
 	private int applicationStateId;
 }

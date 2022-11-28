@@ -1,4 +1,6 @@
-package com.bootcampProject.business.responses.applications;
+package com.bootcampProject.business.responses.blacklists;
+
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateApplicationResponse {
+public class UpdateBlacklistResponse {
 
 	private int id;
 	private int applicantId;
-	private int bootcampId;
-	private int applicationStateId;
+	private LocalDate date;
+	private String reason;
 }

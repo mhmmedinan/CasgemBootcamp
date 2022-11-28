@@ -56,7 +56,8 @@ public class EmployeeManager implements EmployeeService {
 
 	@Override
 	public DataResult<CreateEmployeeResponse> add(CreateEmployeeRequest createEmployeeRequest) {
-		checkIfEmployeeNationalityId(createEmployeeRequest.getNationalityId());
+		checkIfEmployeeNationalityId(createEmployeeRequest.getNationalIdentity());
+		checkIfEmployeeEmailExists(createEmployeeRequest.getEmail());
 		Employee employee = modelMapperService.forRequest().map(createEmployeeRequest, Employee.class);
 		employeeRepository.save(employee);
 
@@ -67,6 +68,7 @@ public class EmployeeManager implements EmployeeService {
 	@Override
 	public DataResult<UpdateEmployeeResponse> update(UpdateEmployeeRequest updateEmployeeRequest) {
 		checkIfEmployeeId(updateEmployeeRequest.getId());
+		checkIfEmployeeEmailExists(updateEmployeeRequest.getEmail());
 		Employee employee = modelMapperService.forRequest().map(updateEmployeeRequest, Employee.class);
 		employeeRepository.save(employee);
 
@@ -84,15 +86,22 @@ public class EmployeeManager implements EmployeeService {
 	}
 
 	private void checkIfEmployeeNationalityId(String nationalityId) {
-		Employee employee = employeeRepository.getByNationalityId(nationalityId);
+		Employee employee = employeeRepository.getByNationalIdentity(nationalityId);
 		if (employee != null)
 			throw new BusinessException(Messages.EmployeeNationalityIdExists);
 
 	}
-	
+
 	private void checkIfEmployeeId(int id) {
 		Employee employee = employeeRepository.findById(id);
-		if(employee==null) throw new BusinessException(Messages.EmployeeIdNotFound);
+		if (employee == null)
+			throw new BusinessException(Messages.EmployeeIdNotFound);
+	}
+
+	private void checkIfEmployeeEmailExists(String email) {
+		Employee employee = employeeRepository.getByEmail(email);
+		if (employee != null)
+			throw new BusinessException(Messages.EmployeeEmailExists);
 	}
 
 }

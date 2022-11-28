@@ -13,12 +13,11 @@ public class GetAllApplicationResponse {
 
 	private int id;
 	private String applicationStateName;
-	private String userFirstName;
-	private String userLastName;
-	private LocalDate userDateOfBirth;
-	private String userNationalityId;
-	private String userEmail;
+	private String applicantFirstName;
+	private String applicantLastName;
+	private LocalDate applicantDateOfBirth;
+	private String applicantNationalIdentity;
+	private String applicantEmail;
 	private String bootcampName;
-	
-	
+
 }

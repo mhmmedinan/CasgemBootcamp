@@ -53,7 +53,7 @@ public class ApplicantManager implements ApplicantService {
 
 	@Override
 	public DataResult<GetApplicantResponse> getById(int id) {
-
+		checkIfApplicantId(id);
 		Applicant applicant = applicantRepository.findById(id);
 		GetApplicantResponse response = modelMapperService.forResponse().map(applicant, GetApplicantResponse.class);
 		return new SuccessDataResult<GetApplicantResponse>(response, Messages.ApplicantListed);
@@ -61,7 +61,8 @@ public class ApplicantManager implements ApplicantService {
 
 	@Override
 	public DataResult<CreateApplicantResponse> add(CreateApplicantRequest createApplicantRequest) {
-		checkIfApplicantNationalityId(createApplicantRequest.getNationalityId());
+		checkIfApplicantNationalityId(createApplicantRequest.getNationalIdentity());
+		checkIfApplicantEmailExists(createApplicantRequest.getEmail());
 		Applicant applicant = modelMapperService.forRequest().map(createApplicantRequest, Applicant.class);
 		applicantRepository.save(applicant);
 
@@ -73,6 +74,7 @@ public class ApplicantManager implements ApplicantService {
 	@Override
 	public DataResult<UpdateApplicantResponse> update(UpdateApplicantRequest updateApplicantRequest) {
 		checkIfApplicantId(updateApplicantRequest.getId());
+		checkIfApplicantEmailExists(updateApplicantRequest.getEmail());
 		Applicant applicant = modelMapperService.forRequest().map(updateApplicantRequest, Applicant.class);
 		applicantRepository.save(applicant);
 
@@ -91,7 +93,7 @@ public class ApplicantManager implements ApplicantService {
 	}
 
 	private void checkIfApplicantNationalityId(String nationalityId) {
-		Applicant applicant = applicantRepository.getByNationalityId(nationalityId);
+		Applicant applicant = applicantRepository.getByNationalIdentity(nationalityId);
 		if (applicant != null)
 			throw new BusinessException(Messages.ApplicantNationalityIdExists);
 
@@ -99,9 +101,15 @@ public class ApplicantManager implements ApplicantService {
 	
 	private void checkIfApplicantId(int id) {
 		Applicant applicant = applicantRepository.findById(id);
-		System.out.println(applicant);
-		if (applicant==null) throw new BusinessException(Messages.ApplicantIdNotFound);
-			
+		if (applicant==null) {
+			throw new BusinessException(Messages.ApplicantIdNotFound);
+		}
+	}
+	
+	private void checkIfApplicantEmailExists(String email) {
+		Applicant applicant = applicantRepository.getByEmail(email);
+		if (applicant != null)
+			throw new BusinessException(Messages.ApplicantEmailExists);
 	}
 
 }

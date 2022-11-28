@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class UpdateApplicationResponse {
 
 	private int id;
-	private int userId;
+	private int applicantId;
 	private int bootcampId;
 	private int applicationStateId;
 }

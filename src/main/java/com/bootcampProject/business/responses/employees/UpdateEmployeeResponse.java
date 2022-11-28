@@ -15,7 +15,7 @@ public class UpdateEmployeeResponse {
 	private String firstName;
 	private String lastName;
 	private LocalDate dateOfBirth;
-	private String nationalityId;
+	private String nationalIdentity;
 	private String position;
 	private String email;
 

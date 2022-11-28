@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.bootcampProject.business.abstracts.ApplicantService;
 import com.bootcampProject.business.abstracts.ApplicationService;
+import com.bootcampProject.business.abstracts.BootcampService;
 import com.bootcampProject.business.constants.Messages;
 import com.bootcampProject.business.requests.applications.CreateApplicationRequest;
 import com.bootcampProject.business.requests.applications.DeleteApplicationRequest;
@@ -13,6 +15,7 @@ import com.bootcampProject.business.responses.applications.CreateApplicationResp
 import com.bootcampProject.business.responses.applications.GetAllApplicationResponse;
 import com.bootcampProject.business.responses.applications.GetApplicationResponse;
 import com.bootcampProject.business.responses.applications.UpdateApplicationResponse;
+import com.bootcampProject.core.utilities.exceptions.BusinessException;
 import com.bootcampProject.core.utilities.mapping.ModelMapperService;
 import com.bootcampProject.core.utilities.results.DataResult;
 import com.bootcampProject.core.utilities.results.Result;
@@ -29,6 +32,8 @@ public class ApplicationManager implements ApplicationService {
 
 	private ApplicationRepository applicationRepository;
 	private ModelMapperService modelMapperService;
+	private ApplicantService applicantService;
+	private BootcampService bootcampService;
 
 	@Override
 	public DataResult<List<GetAllApplicationResponse>> getAll() {
@@ -41,7 +46,7 @@ public class ApplicationManager implements ApplicationService {
 
 	@Override
 	public DataResult<List<GetAllApplicationResponse>> getByUserFirstName(String firstName) {
-		List<Application> applications = applicationRepository.getByUserFirstName(firstName);
+		List<Application> applications = applicationRepository.getByApplicantFirstName(firstName);
 		List<GetAllApplicationResponse> responses = applications.stream()
 				.map(application -> modelMapperService.forResponse().map(application, GetAllApplicationResponse.class))
 				.toList();
@@ -51,37 +56,59 @@ public class ApplicationManager implements ApplicationService {
 	@Override
 	public DataResult<GetApplicationResponse> getById(int id) {
 		Application application = applicationRepository.findById(id).get();
-		GetApplicationResponse response = modelMapperService.forResponse().map(application, GetApplicationResponse.class);
-		return new SuccessDataResult<GetApplicationResponse>(response,Messages.ApplicationListed);
+		GetApplicationResponse response = modelMapperService.forResponse().map(application,
+				GetApplicationResponse.class);
+		return new SuccessDataResult<GetApplicationResponse>(response, Messages.ApplicationListed);
 	}
 
 	@Override
 	public DataResult<CreateApplicationResponse> add(CreateApplicationRequest createApplicationRequest) {
+		checkIfApplicantIdNotDoes(createApplicationRequest.getApplicantId());
+		checkIfExistsBootcampIdNotDoes(createApplicationRequest.getBootcampId());
+		checkIfApplicantIdExists(createApplicationRequest.getApplicantId());
 		Application application = modelMapperService.forRequest().map(createApplicationRequest, Application.class);
 		applicationRepository.save(application);
-		
-		CreateApplicationResponse response = modelMapperService.forResponse().map(application, CreateApplicationResponse.class);
-		return new SuccessDataResult<CreateApplicationResponse>(response,Messages.ApplicationCreated);
+
+		CreateApplicationResponse response = modelMapperService.forResponse().map(application,
+				CreateApplicationResponse.class);
+		return new SuccessDataResult<CreateApplicationResponse>(response, Messages.ApplicationCreated);
 	}
 
 	@Override
 	public DataResult<UpdateApplicationResponse> update(UpdateApplicationRequest updateApplicationRequest) {
+		checkIfApplicantIdNotDoes(updateApplicationRequest.getApplicantId());
+		checkIfExistsBootcampIdNotDoes(updateApplicationRequest.getBootcampId());
+		checkIfApplicantIdExists(updateApplicationRequest.getApplicantId());
 		Application application = modelMapperService.forRequest().map(updateApplicationRequest, Application.class);
 		applicationRepository.save(application);
-		
-		UpdateApplicationResponse response = modelMapperService.forResponse().map(application, UpdateApplicationResponse.class);
-		return new SuccessDataResult<UpdateApplicationResponse>(response,Messages.ApplicationUpdated);
+
+		UpdateApplicationResponse response = modelMapperService.forResponse().map(application,
+				UpdateApplicationResponse.class);
+		return new SuccessDataResult<UpdateApplicationResponse>(response, Messages.ApplicationUpdated);
 	}
 
 	@Override
 	public Result delete(DeleteApplicationRequest deleteApplicationRequest) {
-
 		Application application = new Application();
 		application.setId(deleteApplicationRequest.getId());
 		applicationRepository.delete(application);
-		
-		return new SuccessResult(Messages.ApplicationDeleted);
 
+		return new SuccessResult(Messages.ApplicationDeleted);
 	}
 
+	private void checkIfApplicantIdNotDoes(int id) {
+		applicantService.getById(id);
+	}
+
+	private void checkIfExistsBootcampIdNotDoes(int id) {
+		bootcampService.getById(id);
+	}
+
+	private void checkIfApplicantIdExists(int applicantId) {
+		Application applicant = applicationRepository.findByApplicantId(applicantId);
+		if (applicant!=null)  {
+			throw new BusinessException(Messages.CheckIfApplicantIdExists);
+		}
+	}
+	
 }

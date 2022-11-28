@@ -9,6 +9,7 @@ import com.bootcampProject.entities.users.Applicant;
 public interface ApplicantRepository extends JpaRepository<Applicant, Integer>{
 
 	List<Applicant> getByFirstName(String firstName);
-	Applicant getByNationalityId(String nationalityId);
+	Applicant getByNationalIdentity(String nationalIdentity);
 	Applicant findById(int id);
+	Applicant getByEmail(String email);
 }

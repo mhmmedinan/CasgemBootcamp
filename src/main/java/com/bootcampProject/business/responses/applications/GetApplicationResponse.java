@@ -16,7 +16,7 @@ public class GetApplicationResponse {
 	private String userFirstName;
 	private String userLastName;
 	private LocalDate userDateOfBirth;
-	private String userNationalityId;
+	private String applicantNationalIdentity;
 	private String userEmail;
 	private String bootcampName;
 }

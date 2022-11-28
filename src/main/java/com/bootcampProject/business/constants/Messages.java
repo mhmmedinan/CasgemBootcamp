@@ -5,12 +5,19 @@ public class Messages {
 	// Business Rules
 
 	public static final String ApplicantNationalityIdExists = "Applicant NationalityId Exists";
+	public static final String ApplicantEmailExists = "Applicant Email Exists";
 	public static final String EmployeeNationalityIdExists = "Employee NationalityId Exists";
+	public static final String EmployeeEmailExists = "Employee Email Exists";
 	public static final String InstructorNationalityIdExists = "Instructor NationalityId Exists";
+	public static final String InstructorEmailExists = "Instructor Email Exists";
 
 	public static final String ApplicantIdNotFound = "ApplicantId Not Found";
+	public static final String BootcampIdNotFound = "BootcampId Not Found";
 	public static final String EmployeeIdNotFound = "EmployeeId Not Found";
 	public static final String InstructorIdNotFound = "InstructorId Not Found";
+
+	public static final String ApplicantIdExists = "ApplicantId Exists";
+	public static final String CheckIfApplicantIdExists ="This user has applied before";
 
 	// Applicant
 	public static final String ApplicantDeleted = "Applicant Deleted";
@@ -53,5 +60,9 @@ public class Messages {
 	public static final String BootcampStateCreated = "BootcampState Created";
 	public static final String BootcampStateUpdated = "BootcampState Updated";
 	public static final String BootcampStateDeleted = "BootcampState Deleted";
+	
+	
+	//Blacklist
+	public static final String BlacklistListed = "Blacklist Listed";
 
 }

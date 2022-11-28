@@ -13,7 +13,6 @@ import com.bootcampProject.core.utilities.results.DataResult;
 import com.bootcampProject.core.utilities.results.Result;
 
 public interface ApplicantService {
-
 	DataResult<List<GetAllApplicantResponse>> getAll();
 	DataResult<List<GetAllApplicantResponse>> getByName(String firstName);
 	DataResult<GetApplicantResponse> getById(int id);

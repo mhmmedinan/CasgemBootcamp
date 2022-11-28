@@ -15,7 +15,7 @@ public class GetAllInstructorResponse {
 	private String firstName;
 	private String lastName;
 	private LocalDate dateOfBirth;
-	private String nationalityId;
+	private String nationalIdentity;
 	private String companyName;
 	private String email;
 
