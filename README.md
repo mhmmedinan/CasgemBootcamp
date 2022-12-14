@@ -13,7 +13,7 @@ It is the layer where the database entities are
 <li><b>@OneToMany</b> relationship exists between Instructor and BootCamp</li>
 <li><b>@OneToMany</b> relationship exists between applicant and application</li>
 <li><b>@OneToMany</b> relationship exists between applicant and blacklist</li>
-
+</br>
 <li><b>@OneToMany</b> relationship exists between applicationstate and application</li>
 <li><b>@ManyToOne</b> relationship exists between application and applicant</li>
 <li><b>@ManyToOne</b> relationship exists between application and bootcamp</li>
