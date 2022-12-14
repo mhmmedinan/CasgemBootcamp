@@ -40,3 +40,9 @@ It is the layer where business codes are written.
 # Core Layer
 It is the layer created for the use of project-independent open source codes within the project.
 <li>It includes techniques such as exceptions, mapping, result</li>
+
+# WebApi Layer
+It is the layer used to transfer the project to the client side.
+Uses Restful infrastructure.
+
+<hr>
