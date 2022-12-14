@@ -18,3 +18,9 @@ It is the layer where the database entities are
 <li><b>@ManyToOne</b> relationship exists between application and applicant</li>
 <li><b>@ManyToOne</b> relationship exists between application and bootcamp</li>
 <li><b>@ManyToOne</b> relationship exists between application and applicationstate</li>
+</br>
+<li><b>@ManyToOne</b> relationship exists between blacklist and applicant</li>
+<li><b>@ManyToOne</b> relationship exists between bootcamp and instructor</li>
+<li><b>@ManyToOne</b> relationship exists between bootcamp and bootcampstate</li>
+<li><b>@OneToMany</b> relationship exists between bootcamp and application</li>
+<li><b>@OneToMany</b> relationship exists between bootcampstate and bootcamp</li>
