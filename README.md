@@ -31,3 +31,8 @@ It is the data access layer
 
 # Business Layer
 It is the layer where business codes are written.
+
+<li>Request Response pattern used</li>
+<li>Business rules were written to comply with the clean code and Domain Driven Design principle</li>
+<li>Result infrastructure was used for the success or failure of the data.</li>
+<li>Relevant repositories from DataAccess layer are used in manager classes with dependency injection method</li>
