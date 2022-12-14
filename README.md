@@ -5,3 +5,6 @@ This project was developed with monolith architecture
 # Entities Layer
 It is the layer where the database entities are
 <li><b>users</b> folder contains applicant,employee,instructor,user</li>
+<li>The applicant,employee,instructor class inherits from the user class. polymorphism technique was used</li>
+
+<li>There are classes in the <b>evaluations</b> folder where the relevant training application information will be kept and the state status of this application information. Application,ApplicationState</li>
