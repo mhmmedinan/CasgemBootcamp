@@ -49,3 +49,6 @@ Uses Restful infrastructure.
 <li>Postgresql used as database</li>
 <li>A global exception has been written to the bootcampapplication class for validation operations.</li>
 <img src="https://github.com/mhmmedinan/CasgemBootcamp/blob/master/src/main/java/com/bootcampProject/validationexception.png" witdh=auto>
+</br>
+<li>A global exception has been written in the bootcampapplication class for business rules operations.</li>
+<img src="https://github.com/mhmmedinan/CasgemBootcamp/blob/master/src/main/java/com/bootcampProject/businessexception.png" witdh=auto>
