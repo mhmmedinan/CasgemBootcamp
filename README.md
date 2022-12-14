@@ -11,3 +11,5 @@ It is the layer where the database entities are
 <li>In the <b>Applications</b> folder, there is the class where the bootcamp information will be kept, the class related to the status of these bootcamps, and the class where the students will be blacklisted so that they cannot apply for bootcamp otherwise. Bootcamp,BootcampState,Blacklist</li>
 </br>
 <li><b>@OneToMany</b> relationship exists between Instructor and BootCamp</li>
+<li><b>@OneToMany</b> relationship exists between applicant and application</li>
+<li><b>@OneToMany</b> relationship exists between applicant and blacklist</li>
