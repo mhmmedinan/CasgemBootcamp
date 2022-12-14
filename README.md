@@ -28,3 +28,6 @@ It is the layer where the database entities are
 # DataAccess Layer
 It is the data access layer
 <li>JpaRepository used</li>
+
+# Business Layer
+It is the layer where business codes are written.
