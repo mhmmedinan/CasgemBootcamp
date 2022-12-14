@@ -52,3 +52,6 @@ Uses Restful infrastructure.
 </br>
 <li>A global exception has been written in the bootcampapplication class for business rules operations.</li>
 <img src="https://github.com/mhmmedinan/CasgemBootcamp/blob/master/src/main/java/com/bootcampProject/businessexception.png" witdh=auto>
+</br>
+<li>A global exception is written to the bootcampapplication class for database errors.</li>
+<img src="https://github.com/mhmmedinan/CasgemBootcamp/blob/master/src/main/java/com/bootcampProject/dataexception.png" witdh=auto>
