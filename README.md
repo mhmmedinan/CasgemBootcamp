@@ -24,3 +24,7 @@ It is the layer where the database entities are
 <li><b>@ManyToOne</b> relationship exists between bootcamp and bootcampstate</li>
 <li><b>@OneToMany</b> relationship exists between bootcamp and application</li>
 <li><b>@OneToMany</b> relationship exists between bootcampstate and bootcamp</li>
+
+# DataAccess Layer
+It is the data access layer
+<li>JpaRepository used</li>
