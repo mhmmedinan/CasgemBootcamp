@@ -46,3 +46,4 @@ It is the layer used to transfer the project to the client side.
 Uses Restful infrastructure.
 
 <hr>
+<li>Postgresql used as database</li>
