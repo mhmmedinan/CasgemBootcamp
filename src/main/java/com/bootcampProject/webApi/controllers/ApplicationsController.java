@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +43,8 @@ public class ApplicationsController {
 		return ResponseEntity.badRequest().body(result);
 	}
 	
-	@GetMapping("getbyuserfirstname")
-	public ResponseEntity<?> getByUserFirstName(String firstName){
+	@GetMapping("getbyuserfirstname/{firstName}")
+	public ResponseEntity<?> getByUserFirstName(@PathVariable String firstName){
 		DataResult<List<GetAllApplicationResponse>> result = applicationService.getByUserFirstName(firstName);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);
@@ -52,8 +53,8 @@ public class ApplicationsController {
 	}
 	
 	
-	@GetMapping("getbyid")
-	public ResponseEntity<?> getById(int id){
+	@GetMapping("getbyid/{id}")
+	public ResponseEntity<?> getById(@PathVariable int id){
 		DataResult<GetApplicationResponse> result = applicationService.getById(id);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);

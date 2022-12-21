@@ -1,7 +1,10 @@
 package com.bootcampProject.business.concretes;
 
 import java.util.List;
+import java.util.Set;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.InstructorService;
@@ -21,6 +24,7 @@ import com.bootcampProject.core.utilities.results.SuccessDataResult;
 import com.bootcampProject.core.utilities.results.SuccessResult;
 import com.bootcampProject.dataAccess.abstracts.InstructorRepository;
 import com.bootcampProject.entities.users.Instructor;
+import com.bootcampProject.entities.users.Role;
 
 import lombok.AllArgsConstructor;
 
@@ -30,8 +34,10 @@ public class InstructorManager implements InstructorService {
 
 	private InstructorRepository instructorRepository;
 	private ModelMapperService mapperService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public DataResult<List<GetAllInstructorResponse>> getAll() {
 		List<Instructor> instructors = instructorRepository.findAll();
 		List<GetAllInstructorResponse> responses = instructors.stream()
@@ -41,6 +47,7 @@ public class InstructorManager implements InstructorService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public DataResult<List<GetAllInstructorResponse>> getByFirstName(String firstName) {
 		List<Instructor> instructors = instructorRepository.getByFirstName(firstName);
 		List<GetAllInstructorResponse> responses = instructors.stream()
@@ -50,6 +57,7 @@ public class InstructorManager implements InstructorService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN","ROLE_INSTRUCTOR"})
 	public DataResult<GetInstructorResponse> getById(int id) {
 		checkIfInstructorId(id);
 		Instructor instructor = instructorRepository.findById(id);
@@ -59,10 +67,13 @@ public class InstructorManager implements InstructorService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public DataResult<CreateInstructorResponse> add(CreateInstructorRequest createInstructorRequest) {
 		checkIfInstructorNationalityId(createInstructorRequest.getNationalIdentity());
 		checkIfInstructorEmailExists(createInstructorRequest.getEmail());
 		Instructor instructor = mapperService.forRequest().map(createInstructorRequest, Instructor.class);
+		instructor.setPassword(passwordEncoder.encode(instructor.getPassword()));
+		instructor.setRole(Set.of(Role.ROLE_INSTRUCTOR));
 		instructorRepository.save(instructor);
 
 		CreateInstructorResponse response = mapperService.forResponse().map(instructor, CreateInstructorResponse.class);
@@ -70,10 +81,13 @@ public class InstructorManager implements InstructorService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN","ROLE_INSTRUCTOR"})
 	public DataResult<UpdateInstructorResponse> update(UpdateInstructorRequest updateInstructorRequest) {
 		checkIfInstructorId(updateInstructorRequest.getId());
 		checkIfInstructorEmailExists(updateInstructorRequest.getEmail());
 		Instructor instructor = mapperService.forRequest().map(updateInstructorRequest, Instructor.class);
+		instructor.setPassword(passwordEncoder.encode(instructor.getPassword()));
+		instructor.setRole(Set.of(Role.ROLE_INSTRUCTOR));
 		instructorRepository.save(instructor);
 
 		UpdateInstructorResponse response = mapperService.forResponse().map(instructor, UpdateInstructorResponse.class);
@@ -81,6 +95,7 @@ public class InstructorManager implements InstructorService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public Result delete(DeleteInstructorRequest deleteInstructorRequest) {
 		checkIfInstructorId(deleteInstructorRequest.getId());
 		Instructor instructor = mapperService.forRequest().map(deleteInstructorRequest, Instructor.class);

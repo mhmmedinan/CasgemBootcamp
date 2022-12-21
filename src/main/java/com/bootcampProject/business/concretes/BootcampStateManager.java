@@ -2,6 +2,7 @@ package com.bootcampProject.business.concretes;
 
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.BootcampStateService;
@@ -30,6 +31,7 @@ public class BootcampStateManager implements BootcampStateService {
 	private ModelMapperService modelMapperService;
 	
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllBootcampStateResponse>> getAll() {
 		List<BootcampState> bootcampStates = bootcampStateRepository.findAll();
 		List<GetAllBootcampStateResponse> responses = bootcampStates.stream(
@@ -38,6 +40,7 @@ public class BootcampStateManager implements BootcampStateService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<CreateBootcampStateResponse> add(CreateBootcampStateRequest createBootcampStateRequest) {
 		BootcampState bootcampState = modelMapperService.forRequest().map(createBootcampStateRequest, BootcampState.class);
 		bootcampStateRepository.save(bootcampState);
@@ -47,6 +50,7 @@ public class BootcampStateManager implements BootcampStateService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<UpdateBootcampStateResponse> update(UpdateBootcampStateRequest updateBootcampStateRequest) {
 		BootcampState bootcampState = modelMapperService.forRequest().map(updateBootcampStateRequest, BootcampState.class);
 		bootcampStateRepository.save(bootcampState);
@@ -56,6 +60,7 @@ public class BootcampStateManager implements BootcampStateService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public Result delete(DeleteBootcampStateRequest deleteBootcampStateRequest) {
 		BootcampState bootcampState = modelMapperService.forRequest().map(deleteBootcampStateRequest, BootcampState.class);
 		bootcampStateRepository.delete(bootcampState);

@@ -2,6 +2,7 @@ package com.bootcampProject.business.concretes;
 
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.ApplicantService;
@@ -38,6 +39,7 @@ public class ApplicationManager implements ApplicationService {
 	private BlacklistService blacklistService;
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllApplicationResponse>> getAll() {
 		List<Application> applications = applicationRepository.findAll();
 		List<GetAllApplicationResponse> responses = applications.stream()
@@ -47,6 +49,7 @@ public class ApplicationManager implements ApplicationService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllApplicationResponse>> getByUserFirstName(String firstName) {
 		List<Application> applications = applicationRepository.getByApplicantFirstName(firstName);
 		List<GetAllApplicationResponse> responses = applications.stream()
@@ -56,6 +59,7 @@ public class ApplicationManager implements ApplicationService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<GetApplicationResponse> getById(int id) {
 		Application application = applicationRepository.findById(id).get();
 		GetApplicationResponse response = modelMapperService.forResponse().map(application,
@@ -64,6 +68,7 @@ public class ApplicationManager implements ApplicationService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<CreateApplicationResponse> add(CreateApplicationRequest createApplicationRequest) {
 		checkIfApplicantIdNotDoes(createApplicationRequest.getApplicantId());
 		checkIfExistsBootcampIdNotDoes(createApplicationRequest.getBootcampId());
@@ -78,6 +83,7 @@ public class ApplicationManager implements ApplicationService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<UpdateApplicationResponse> update(UpdateApplicationRequest updateApplicationRequest) {
 		checkIfApplicantIdNotDoes(updateApplicationRequest.getApplicantId());
 		checkIfExistsBootcampIdNotDoes(updateApplicationRequest.getBootcampId());
@@ -92,6 +98,7 @@ public class ApplicationManager implements ApplicationService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public Result delete(DeleteApplicationRequest deleteApplicationRequest) {
 		Application application = new Application();
 		application.setId(deleteApplicationRequest.getId());

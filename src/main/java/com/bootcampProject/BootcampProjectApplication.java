@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,11 +21,37 @@ import com.bootcampProject.core.utilities.results.ErrorDataResult;
 
 @SpringBootApplication
 @RestControllerAdvice
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class BootcampProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BootcampProjectApplication.class, args);
 	}
+
+//	@Component
+//	@AllArgsConstructor
+//	public class DataInitializer implements ApplicationRunner {
+//
+//		private EmployeeService employeeService;
+//		private final PasswordEncoder passwordEncoder;
+//
+//		@Override
+//		public void run(ApplicationArguments args) throws Exception {
+//			CreateEmployeeRequest employeeRequest = new CreateEmployeeRequest();
+//			employeeRequest.setFirstName("Muhammed");
+//			employeeRequest.setLastName("İnan");
+//			employeeRequest.setPosition("Developer");
+//			employeeRequest.setDateOfBirth(LocalDate.of(1997, 9, 14));
+//			employeeRequest.setEmail("admin12@test.com");
+//			employeeRequest.setNationalIdentity("14543054689");
+//			employeeRequest.setPassword(passwordEncoder.encode("123456"));
+//			employeeRequest.setUsername("minan");
+//			employeeRequest.setRole(Set.of(Role.ROLE_ADMIN));
+//			employeeService.add(employeeRequest);
+//
+//		}
+//
+//	}
 
 	@Bean
 	public ModelMapper getModelMapper() {
@@ -56,7 +83,8 @@ public class BootcampProjectApplication {
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorDataResult<Object> handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
-		ErrorDataResult<Object> errorDataResult = new ErrorDataResult<>(exception.getMessage(),"DATA INTEGRITY EXCEPTION");
+		ErrorDataResult<Object> errorDataResult = new ErrorDataResult<>(exception.getMessage(),
+				"DATA INTEGRITY EXCEPTION");
 		return errorDataResult;
 	}
 

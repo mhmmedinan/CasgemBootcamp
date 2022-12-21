@@ -2,6 +2,7 @@ package com.bootcampProject.business.concretes;
 
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.BlacklistService;
@@ -32,6 +33,7 @@ public class BlacklistManager implements BlacklistService {
 	private ModelMapperService modelMapperService;
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllBlacklistResponse>> getAll() {
 		List<Blacklist> blacklists = blacklistRepository.findAll();
 		List<GetAllBlacklistResponse> responses = blacklists.stream()
@@ -40,6 +42,7 @@ public class BlacklistManager implements BlacklistService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllBlacklistResponse>> getApplicantFirstName(String applicantFirstName) {
 		List<Blacklist> blacklists = blacklistRepository.getByApplicantFirstName(applicantFirstName);
 		List<GetAllBlacklistResponse> responses = blacklists.stream()
@@ -48,6 +51,7 @@ public class BlacklistManager implements BlacklistService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<GetBlacklistResponse> getById(int id) {
 		Blacklist blacklist = blacklistRepository.findById(id).get();
 		GetBlacklistResponse response = modelMapperService.forResponse().map(blacklist, GetBlacklistResponse.class);
@@ -55,6 +59,7 @@ public class BlacklistManager implements BlacklistService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<CreateBlacklistResponse> add(CreateBlacklistRequest createBlacklistRequest) {
 		checkIfApplicantIdExists(createBlacklistRequest.getApplicantId());
 		Blacklist blacklist = modelMapperService.forRequest().map(createBlacklistRequest, Blacklist.class);
@@ -65,6 +70,7 @@ public class BlacklistManager implements BlacklistService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<UpdateBlacklistResponse> update(UpdateBlacklistRequest updateBlacklistRequest) {
 		checkIfApplicantIdExists(updateBlacklistRequest.getApplicantId());
 		Blacklist blacklist = modelMapperService.forResponse().map(updateBlacklistRequest, Blacklist.class);
@@ -75,6 +81,7 @@ public class BlacklistManager implements BlacklistService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public Result delete(DeleteBlacklistRequest deleteBlacklistRequest) {
 		Blacklist blacklist = modelMapperService.forRequest().map(deleteBlacklistRequest, Blacklist.class);
 		blacklistRepository.delete(blacklist);
@@ -82,6 +89,7 @@ public class BlacklistManager implements BlacklistService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<GetBlacklistResponse> getByApplicantId(int applicantId) {
 		Blacklist blacklist = blacklistRepository.findByApplicantId(applicantId);
 		GetBlacklistResponse response = modelMapperService.forResponse().map(blacklist, GetBlacklistResponse.class);

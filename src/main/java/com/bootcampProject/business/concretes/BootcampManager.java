@@ -3,6 +3,7 @@ package com.bootcampProject.business.concretes;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.BootcampService;
@@ -35,6 +36,7 @@ public class BootcampManager implements BootcampService {
 	private InstructorService instructorService;
 	
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllBootcampResponse>> getAll() {
 		List<Bootcamp> bootcamps = bootcampRepository.findAll();
 		List<GetAllBootcampResponse> responses = bootcamps.stream().
@@ -43,6 +45,7 @@ public class BootcampManager implements BootcampService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllBootcampResponse>> getByName(String name) {
 		List<Bootcamp> bootcamps = bootcampRepository.getByName(name);
 		List<GetAllBootcampResponse> responses = bootcamps.stream().
@@ -51,6 +54,7 @@ public class BootcampManager implements BootcampService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<GetBootcampResponse> getById(int id) {
 		checkIfExistsBootcampId(id);
 		Bootcamp bootcamp = bootcampRepository.findById(id);
@@ -59,6 +63,7 @@ public class BootcampManager implements BootcampService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<CreateBootcampResponse> add(CreateBootcampRequest createBootcampRequest) {
 		checkIfExistsIntructorIdNotDoes(createBootcampRequest.getInstructorId());
 		checkIfStartDateIsItBigEndDate(createBootcampRequest.getStartDate(),createBootcampRequest.getEndDate());
@@ -70,6 +75,7 @@ public class BootcampManager implements BootcampService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<UpdateBootcampResponse> update(UpdateBootcampRequest updateBootcampRequest) {
 		checkIfExistsIntructorIdNotDoes(updateBootcampRequest.getInstructorId());
 		checkIfStartDateIsItBigEndDate(updateBootcampRequest.getStartDate(),updateBootcampRequest.getEndDate());
@@ -81,6 +87,7 @@ public class BootcampManager implements BootcampService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public Result delete(DeleteBootcampRequest deleteBootcampRequest) {
 		Bootcamp bootcamp = new Bootcamp();
 		bootcamp.setId(deleteBootcampRequest.getId());

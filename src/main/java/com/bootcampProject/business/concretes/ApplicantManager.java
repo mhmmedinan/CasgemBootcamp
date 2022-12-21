@@ -1,7 +1,10 @@
 package com.bootcampProject.business.concretes;
 
 import java.util.List;
+import java.util.Set;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.ApplicantService;
@@ -21,6 +24,7 @@ import com.bootcampProject.core.utilities.results.SuccessDataResult;
 import com.bootcampProject.core.utilities.results.SuccessResult;
 import com.bootcampProject.dataAccess.abstracts.ApplicantRepository;
 import com.bootcampProject.entities.users.Applicant;
+import com.bootcampProject.entities.users.Role;
 
 import lombok.AllArgsConstructor;
 
@@ -30,8 +34,10 @@ public class ApplicantManager implements ApplicantService {
 
 	private ApplicantRepository applicantRepository;
 	private ModelMapperService modelMapperService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public DataResult<List<GetAllApplicantResponse>> getAll() {
 
 		List<Applicant> applicants = applicantRepository.findAll();
@@ -43,6 +49,7 @@ public class ApplicantManager implements ApplicantService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public DataResult<List<GetAllApplicantResponse>> getByName(String firstName) {
 		List<Applicant> applicants = applicantRepository.getByFirstName(firstName);
 		List<GetAllApplicantResponse> responses = applicants.stream()
@@ -52,6 +59,7 @@ public class ApplicantManager implements ApplicantService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN","ROLE_APPLICANT"})
 	public DataResult<GetApplicantResponse> getById(int id) {
 		checkIfApplicantId(id);
 		Applicant applicant = applicantRepository.findById(id);
@@ -60,30 +68,35 @@ public class ApplicantManager implements ApplicantService {
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public DataResult<CreateApplicantResponse> add(CreateApplicantRequest createApplicantRequest) {
 		checkIfApplicantNationalityId(createApplicantRequest.getNationalIdentity());
 		checkIfApplicantEmailExists(createApplicantRequest.getEmail());
 		Applicant applicant = modelMapperService.forRequest().map(createApplicantRequest, Applicant.class);
+		applicant.setPassword(passwordEncoder.encode(applicant.getPassword()));
+        applicant.setRole(Set.of(Role.ROLE_APPLICANT));
 		applicantRepository.save(applicant);
-
 		CreateApplicantResponse response = modelMapperService.forResponse().map(applicant,
 				CreateApplicantResponse.class);
 		return new SuccessDataResult<CreateApplicantResponse>(response, Messages.ApplicantCreated);
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN","ROLE_APPLICANT"})
 	public DataResult<UpdateApplicantResponse> update(UpdateApplicantRequest updateApplicantRequest) {
 		checkIfApplicantId(updateApplicantRequest.getId());
 		checkIfApplicantEmailExists(updateApplicantRequest.getEmail());
 		Applicant applicant = modelMapperService.forRequest().map(updateApplicantRequest, Applicant.class);
+		applicant.setPassword(passwordEncoder.encode(applicant.getPassword()));
+        applicant.setRole(Set.of(Role.ROLE_APPLICANT));
 		applicantRepository.save(applicant);
-
 		UpdateApplicantResponse response = modelMapperService.forResponse().map(applicant,
 				UpdateApplicantResponse.class);
 		return new SuccessDataResult<UpdateApplicantResponse>(response, Messages.ApplicantUpdated);
 	}
 
 	@Override
+	@Secured({"ROLE_ADMIN"})
 	public Result delete(DeleteApplicantRequest deleteApplicantRequest) {
 		checkIfApplicantId(deleteApplicantRequest.getId());
 		Applicant applicant = modelMapperService.forRequest().map(deleteApplicantRequest, Applicant.class);
@@ -98,18 +111,20 @@ public class ApplicantManager implements ApplicantService {
 			throw new BusinessException(Messages.ApplicantNationalityIdExists);
 
 	}
-	
+
 	private void checkIfApplicantId(int id) {
 		Applicant applicant = applicantRepository.findById(id);
-		if (applicant==null) {
+		if (applicant == null) {
 			throw new BusinessException(Messages.ApplicantIdNotFound);
 		}
 	}
-	
+
 	private void checkIfApplicantEmailExists(String email) {
 		Applicant applicant = applicantRepository.getByEmail(email);
 		if (applicant != null)
 			throw new BusinessException(Messages.ApplicantEmailExists);
 	}
+
+	
 
 }

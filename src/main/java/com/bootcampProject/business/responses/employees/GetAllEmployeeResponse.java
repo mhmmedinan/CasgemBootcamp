@@ -1,6 +1,10 @@
 package com.bootcampProject.business.responses.employees;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Set;
+
+import com.bootcampProject.entities.users.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +22,8 @@ public class GetAllEmployeeResponse {
 	private String nationalIdentity;
 	private String position;
 	private String email;
+	private String username;
+	private Set<Role> role;
 
 }
 

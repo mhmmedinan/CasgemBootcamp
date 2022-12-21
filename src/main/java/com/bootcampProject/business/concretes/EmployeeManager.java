@@ -1,7 +1,10 @@
 package com.bootcampProject.business.concretes;
 
 import java.util.List;
+import java.util.Set;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.EmployeeService;
@@ -21,6 +24,7 @@ import com.bootcampProject.core.utilities.results.SuccessDataResult;
 import com.bootcampProject.core.utilities.results.SuccessResult;
 import com.bootcampProject.dataAccess.abstracts.EmployeeRepository;
 import com.bootcampProject.entities.users.Employee;
+import com.bootcampProject.entities.users.Role;
 
 import lombok.AllArgsConstructor;
 
@@ -30,8 +34,10 @@ public class EmployeeManager implements EmployeeService {
 
 	private EmployeeRepository employeeRepository;
 	private ModelMapperService modelMapperService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllEmployeeResponse>> getAll() {
 		List<Employee> employees = employeeRepository.findAll();
 		List<GetAllEmployeeResponse> responses = employees.stream()
@@ -40,6 +46,7 @@ public class EmployeeManager implements EmployeeService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllEmployeeResponse>> getByFirstName(String firstName) {
 		List<Employee> employees = employeeRepository.getByFirstName(firstName);
 		List<GetAllEmployeeResponse> responses = employees.stream()
@@ -48,6 +55,7 @@ public class EmployeeManager implements EmployeeService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<GetEmployeeResponse> getById(int id) {
 		Employee employee = employeeRepository.findById(id);
 		GetEmployeeResponse response = modelMapperService.forResponse().map(employee, GetEmployeeResponse.class);
@@ -55,21 +63,26 @@ public class EmployeeManager implements EmployeeService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<CreateEmployeeResponse> add(CreateEmployeeRequest createEmployeeRequest) {
 		checkIfEmployeeNationalityId(createEmployeeRequest.getNationalIdentity());
 		checkIfEmployeeEmailExists(createEmployeeRequest.getEmail());
 		Employee employee = modelMapperService.forRequest().map(createEmployeeRequest, Employee.class);
+		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+		employee.setRole(Set.of(Role.ROLE_ADMIN,Role.ROLE_APPLICANT,Role.ROLE_INSTRUCTOR));
 		employeeRepository.save(employee);
-
 		CreateEmployeeResponse response = modelMapperService.forResponse().map(employee, CreateEmployeeResponse.class);
 		return new SuccessDataResult<CreateEmployeeResponse>(response, Messages.EmployeeCreated);
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<UpdateEmployeeResponse> update(UpdateEmployeeRequest updateEmployeeRequest) {
 		checkIfEmployeeId(updateEmployeeRequest.getId());
 		checkIfEmployeeEmailExists(updateEmployeeRequest.getEmail());
 		Employee employee = modelMapperService.forRequest().map(updateEmployeeRequest, Employee.class);
+		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+		employee.setRole(Set.of(Role.ROLE_ADMIN,Role.ROLE_APPLICANT,Role.ROLE_INSTRUCTOR));
 		employeeRepository.save(employee);
 
 		UpdateEmployeeResponse response = modelMapperService.forResponse().map(employee, UpdateEmployeeResponse.class);
@@ -77,6 +90,7 @@ public class EmployeeManager implements EmployeeService {
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public Result delete(DeleteEmployeeRequest deleteEmployeeRequest) {
 		checkIfEmployeeId(deleteEmployeeRequest.getId());
 		Employee employee = modelMapperService.forRequest().map(deleteEmployeeRequest, Employee.class);

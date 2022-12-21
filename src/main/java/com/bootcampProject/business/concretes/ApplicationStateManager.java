@@ -2,6 +2,7 @@ package com.bootcampProject.business.concretes;
 
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.bootcampProject.business.abstracts.ApplicationStateService;
@@ -30,6 +31,7 @@ public class ApplicationStateManager implements ApplicationStateService{
 	private ModelMapperService modelMapperService;
 	
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<List<GetAllApplicationStateResponse>> getAll() {
 		List<ApplicationState> applicationStates = applicationStateRepository.findAll();
 		List<GetAllApplicationStateResponse> responses = applicationStates.stream()
@@ -39,6 +41,7 @@ public class ApplicationStateManager implements ApplicationStateService{
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<CreateApplicationStateResponse> add(CreateApplicationStateRequest createApplicationStateRequest) {
 		ApplicationState applicationState = modelMapperService.forRequest().map(createApplicationStateRequest, ApplicationState.class);
 		applicationStateRepository.save(applicationState);
@@ -48,6 +51,7 @@ public class ApplicationStateManager implements ApplicationStateService{
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public DataResult<UpdateApplicationStateResponse> update(
 			UpdateApplicationStateRequest updateApplicationStateRequest) {
 		
@@ -59,6 +63,7 @@ public class ApplicationStateManager implements ApplicationStateService{
 	}
 
 	@Override
+	@Secured("ROLE_ADMIN")
 	public Result delete(DeleteApplicationStateRequest deleteApplicationStateRequest) {
 		ApplicationState applicationState = modelMapperService.forRequest().map(deleteApplicationStateRequest, ApplicationState.class);
 		applicationStateRepository.delete(applicationState);
